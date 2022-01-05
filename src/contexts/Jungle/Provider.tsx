@@ -177,7 +177,7 @@ const JungleProvider: React.FC = ({ children }) => {
       if (!jungle) return;
 
       return (
-        ((animal.rarity / jungle.maximumRarity.toNumber()) *
+        ((Math.min(jungle.maximumRarity.toNumber(), animal.rarity) / jungle.maximumRarity.toNumber()) *
           (jungle.maximumRarityMultiplier.toNumber() - 10000) +
           10000) /
         10000
