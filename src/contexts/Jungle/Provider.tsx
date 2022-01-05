@@ -366,7 +366,7 @@ const JungleProvider: React.FC = ({ children }) => {
           bumps,
           tree.getProofArray(indexStaked),
           new anchor.BN(animal.rarity),
-          new anchor.BN(animal.faction),
+          new anchor.BN(factionToNumber(animal.faction)),
           {
             accounts: {
               jungle: jungleAddress,
