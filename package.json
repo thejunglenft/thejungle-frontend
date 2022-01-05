@@ -1,0 +1,76 @@
+{
+  "name": "the-jungle",
+  "version": "0.1.0",
+  "author": "Dodecahedr0x",
+  "license": "Apache-2.0",
+  "files": [
+    "public",
+    "src",
+    ".env",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "tsconfig.json",
+    "yarn.lock"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rm -rf build/*",
+    "start": "craco start",
+    "build": "yarn clean && craco build",
+    "test": "craco test",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^1.1.1",
+    "@chakra-ui/react": "^1.7.1",
+    "@emotion/react": "^11.6.0",
+    "@emotion/styled": "^11.6.0",
+    "@metaplex-foundation/mpl-token-metadata": "^0.0.2",
+    "@metaplex/js": "^4.3.0",
+    "@project-serum/anchor": "^0.18.2",
+    "@solana/wallet-adapter-base": "^0.7.0",
+    "@solana/wallet-adapter-react": "^0.13.0",
+    "@solana/wallet-adapter-react-ui": "^0.6.0",
+    "@solana/wallet-adapter-wallets": "^0.11.0",
+    "@solana/web3.js": "^1.20.0",
+    "axios": "^0.24.0",
+    "dotenv": "^10.0.0",
+    "framer-motion": "4",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
+    "react-router-dom": "^6.0.2",
+    "web-vitals": "^2.1.2"
+  },
+  "devDependencies": {
+    "@craco/craco": "^6.3.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.24",
+    "@types/react-dom": "^17.0.0",
+    "react-scripts": "^4.0.3",
+    "source-map-explorer": "^2.5.2",
+    "typescript": "^4.4.3",
+    "yarn": "^1.22.11"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
