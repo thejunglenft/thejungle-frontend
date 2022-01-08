@@ -141,7 +141,10 @@ const LotteryProvider: React.FC = ({ children }) => {
 
     try {
       // TODO: User filters to only fetch this player's participations
-      const participations = await program.account.lotteryParticipation.all();
+      const participations = await program.account.lotteryParticipation.all([
+        { memcmp: { offset: 1, bytes: wallet.publicKey.toString() } },
+      ]);
+      console.log(participations)
       setUserParticipations(
         participations
           .map((e) => ({
@@ -166,8 +169,14 @@ const LotteryProvider: React.FC = ({ children }) => {
    */
   const fetchNextPot = useCallback(async () => {
     if (!lottery) return;
+    console.log(
+      await provider.connection.getBalance(lottery.escrow),
+      lottery.unclaimedPot
+    );
     setNextPot(
-      (await provider.connection.getBalance(lottery.escrow)) / 10 ** 9
+      ((await provider.connection.getBalance(lottery.escrow)) -
+        lottery.unclaimedPot.toNumber()) /
+        10 ** 9
     );
   }, [lottery, provider, setNextPot]);
 

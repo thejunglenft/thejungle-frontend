@@ -45,10 +45,10 @@ const devnetConstants = {
     "So11111111111111111111111111111111111111112"
   ),
   jungleKey: new anchor.web3.PublicKey(
-    "BRK9vQaBnXBLCMd4QUaYTFFq5eTZ2yZHA76zwf5nZmtW"
+    "7sL8xCP733dh7TnsqREQi9DzK2xDQjQjodAgEtkz9NKa"
   ),
   lotteryKey: new anchor.web3.PublicKey(
-    "7zPZHrsSe2uWjGai7Li9gAqCW1YBg1JZnk3Ym9rT713R"
+    "EEisFsGbo3BTaLN8JayBeGcCrJkJCxGB16DkCAnP6qWY"
   ),
   metadata: devnetMetadata as any as StaticMetadata[],
 };

@@ -53,21 +53,30 @@ const ParticipationCard: React.FC<TokenCardProps> = ({ participation }) => {
         </Text>
         {round && (
           <>
-            <Text>The pot was {round.pot.toString()} SOL</Text>
-            <Text>The winner was {FACTIONS[round.winner - 1].name}</Text>
             <Text>
-              You spent {participation.spendings[round.winner - 1].toString()} $
-              {constants.ticker} on the winner.
+              The winners were <b>{FACTIONS[round.winner - 1].name}</b>, you
+              spent{" "}
+              {participation.spendings[round.winner - 1].toNumber() / 10 ** 9} $
+              {constants.ticker} on them.
             </Text>
+            <Text>The pot was {round.pot.toString()} SOL</Text>
             <Text>
               You earned{" "}
+              {round.spendings[round.winner - 1].gt(new BN(0))
+                ? participation.spendings[round.winner - 1]
+                    .mul(round.pot)
+                    .div(round.spendings[round.winner - 1])
+                    .toNumber() /
+                  10 ** 9
+                : 0}
+              (
               {round.spendings[round.winner - 1].gt(new BN(0))
                 ? participation.spendings[round.winner - 1]
                     .mul(new BN(10000))
                     .div(round.spendings[round.winner - 1])
                     .toNumber() / 100
                 : 0}
-              % of the pot
+              % of the pot)
             </Text>
           </>
         )}
