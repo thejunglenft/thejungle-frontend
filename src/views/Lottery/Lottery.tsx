@@ -12,14 +12,19 @@ import {
 import useLottery from "hooks/useLottery";
 import { FACTIONS } from "../../constants";
 import { BN } from "@project-serum/anchor";
-import { useWallet } from "@solana/wallet-adapter-react";
 import FactionCard from "components/FactionCard";
 import ParticipationCard from "components/ParticipationCard";
+import { useConnectedWallet } from "@saberhq/use-solana";
 
 const Lottery: React.FC = () => {
-  const wallet = useWallet();
-  const { lottery, currentRound, nextPot, userParticipations, newLotteryRound } =
-    useLottery();
+  const wallet = useConnectedWallet();
+  const {
+    lottery,
+    currentRound,
+    nextPot,
+    userParticipations,
+    newLotteryRound,
+  } = useLottery();
 
   const [now, setNow] = useState<number>();
 
@@ -78,7 +83,7 @@ const Lottery: React.FC = () => {
                 colorScheme="blue"
                 m="3"
                 onClick={handleNewRound}
-                disabled={!wallet.publicKey}
+                disabled={!wallet}
               >
                 Start next round
               </Button>

@@ -68,8 +68,8 @@ const ParticipationCard: React.FC<TokenCardProps> = ({ participation }) => {
                     .div(round.spendings[round.winner - 1])
                     .toNumber() /
                   10 ** 9
-                : 0}
-              (
+                : 0}{" "}
+              SOL (
               {round.spendings[round.winner - 1].gt(new BN(0))
                 ? participation.spendings[round.winner - 1]
                     .mul(new BN(10000))

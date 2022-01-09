@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from "react";
 import { Route, HashRouter as Router, Routes } from "react-router-dom";
 import { ChakraProvider, useToast } from "@chakra-ui/react";
 import { WalletAdapterNetwork, WalletError } from "@solana/wallet-adapter-base";
+import { WalletKitProvider } from "@gokiprotocol/walletkit";
 import {
   ConnectionProvider,
   WalletProvider,
@@ -26,6 +27,7 @@ import { clusterApiUrl } from "@solana/web3.js";
 import Lottery from "views/Lottery";
 import { LotteryProvider } from "contexts/Lottery";
 import Admin from "views/Admin";
+import { ModalStep } from "@gokiprotocol/walletkit/dist/cjs/components/WalletSelectorModal";
 
 const WalletProviders: React.FC = ({ children }) => {
   const network = constants.mainnet
@@ -69,14 +71,21 @@ const WalletProviders: React.FC = ({ children }) => {
   );
 
   return (
-    <ConnectionProvider
-      endpoint={endpoint}
-      config={{ confirmTransactionInitialTimeout: 60000 }}
+    <WalletKitProvider
+      app={{
+        name: "The Jungle",
+      }}
+      initialStep={ModalStep.Select}
+      defaultNetwork={network}
+      networkConfigs={{
+        "mainnet-beta": { name: "RunNode", endpoint: endpoint },
+        devnet: { name: "RunNode", endpoint: endpoint },
+      }}
     >
       <WalletProvider wallets={wallets} onError={onError}>
         <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
-    </ConnectionProvider>
+    </WalletKitProvider>
   );
 };
 

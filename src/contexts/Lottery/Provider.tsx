@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState, useMemo } from "react";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import {
   PublicKey,
   SystemProgram,
@@ -21,13 +20,15 @@ import {
 } from "../../constants/types/lottery";
 import idl from "../../constants/idls/lottery.json";
 import useJungle from "hooks/useJungle";
+import { useConnectedWallet, useSolana } from "@saberhq/use-solana";
+import { findProgramAddressSync } from "@project-serum/anchor/dist/cjs/utils/pubkey";
 
 const programID = new PublicKey(idl.metadata.address);
 
 const LotteryProvider: React.FC = ({ children }) => {
   const toast = useToast();
-  const { connection } = useConnection();
-  const wallet = useWallet();
+  const { connection } = useSolana();
+  const wallet = useConnectedWallet();
   const { jungle, userAccount, fetchUserAccount } = useJungle();
 
   const { isOpen: confirming, onOpen, onClose } = useDisclosure();
@@ -131,7 +132,7 @@ const LotteryProvider: React.FC = ({ children }) => {
    * Fetches the user participations
    */
   const fetchUserParticipations = useCallback(async () => {
-    if (!wallet || !wallet.publicKey) return;
+    if (!wallet || !wallet.publicKey || !lottery) return;
 
     const program = new Program<LotteryProgram>(
       LotteryIdl,
@@ -139,14 +140,28 @@ const LotteryProvider: React.FC = ({ children }) => {
       provider
     );
 
+    [1, 2, 3].filter(
+      async (e) =>
+        new Promise(async (resolve) => setTimeout(() => resolve(true), 1000))
+    );
+
     try {
       // TODO: User filters to only fetch this player's participations
-      const participations = await program.account.lotteryParticipation.all([
-        { memcmp: { offset: 1, bytes: wallet.publicKey.toString() } },
-      ]);
-      console.log(participations)
+      const participations = await program.account.lotteryParticipation.all();
       setUserParticipations(
         participations
+          // Filter participations for this lottery only
+          .filter((e) => {
+            const [participationAddress] = findProgramAddressSync(
+              [
+                Buffer.from("participation"),
+                lottery.key.toBuffer(),
+                new BN(e.account.index).toArrayLike(Buffer, "le", 8),
+              ],
+              programID
+            );
+            return e.publicKey.equals(participationAddress);
+          })
           .map((e) => ({
             player: e.account.player,
             index: e.account.index,
@@ -158,7 +173,7 @@ const LotteryProvider: React.FC = ({ children }) => {
     } catch (err) {
       console.log("Failed fetching owned tokens", err);
     }
-  }, [provider, wallet]);
+  }, [provider, lottery, wallet]);
 
   useEffect(() => {
     fetchUserParticipations();
@@ -169,10 +184,6 @@ const LotteryProvider: React.FC = ({ children }) => {
    */
   const fetchNextPot = useCallback(async () => {
     if (!lottery) return;
-    console.log(
-      await provider.connection.getBalance(lottery.escrow),
-      lottery.unclaimedPot
-    );
     setNextPot(
       ((await provider.connection.getBalance(lottery.escrow)) -
         lottery.unclaimedPot.toNumber()) /

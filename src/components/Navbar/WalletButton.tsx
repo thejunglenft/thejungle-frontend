@@ -1,27 +1,18 @@
 import { Button, Tag, TagLabel } from "@chakra-ui/react";
-import { useDisclosure } from "@chakra-ui/hooks";
-import { useWallet } from "@solana/wallet-adapter-react";
-import WalletModal from "../../components/WalletModal";
-import { useEffect } from "react";
+import { ConnectWalletButton } from "@gokiprotocol/walletkit";
+import { useSolana } from "@saberhq/use-solana";
 import { shortAddress } from "utils";
 
 import useCollection from "../../hooks/useJungle";
 import constants from "../../constants";
 
-const WalletButton: React.FC = () => {
-  const { isOpen, onClose, onOpen } = useDisclosure();
-  const { connected, publicKey, disconnect } = useWallet();
-  const { userAccount } = useCollection();
 
-  useEffect(() => {
-    if (connected) {
-      onClose();
-    }
-  }, [connected, onClose]);
+const WalletButton: React.FC = () => {
+  const { connected, publicKey, disconnect } = useSolana()
+  const { userAccount } = useCollection();
 
   return (
     <>
-      <WalletModal isOpen={isOpen} onClose={onClose} />
       {connected ? (
         <>
           {userAccount && (
@@ -36,7 +27,7 @@ const WalletButton: React.FC = () => {
           </Button>
         </>
       ) : (
-        <Button onClick={onOpen}>Connect</Button>
+        <ConnectWalletButton />
       )}
     </>
   );

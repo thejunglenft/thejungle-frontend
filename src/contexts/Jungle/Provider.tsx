@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState, useMemo } from "react";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useSolana } from "@saberhq/use-solana";
+import { createTokenAccount } from "@saberhq/token-utils";
+import { useConnectedWallet } from "@gokiprotocol/walletkit";
 import {
   PublicKey,
   SystemProgram,
@@ -17,7 +19,7 @@ import { Program } from "@project-serum/anchor";
 import { Metadata } from "@metaplex-foundation/mpl-token-metadata";
 import { useDisclosure, useToast } from "@chakra-ui/react";
 
-import { buildLeaves, factionToNumber, findTokenAddress } from "utils";
+import { buildLeaves, factionToNumber } from "../../utils";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import Context from "./Context";
 import constants from "../../constants";
@@ -27,14 +29,14 @@ import {
   IDL as JundleIdl,
 } from "../../constants/types/jungle";
 import idl from "../../constants/idls/jungle.json";
-import { MerkleTree } from "utils/merkleTree";
+import { MerkleTree } from "../../utils/merkleTree";
 
 const programID = new PublicKey(idl.metadata.address);
 
 const JungleProvider: React.FC = ({ children }) => {
   const toast = useToast();
-  const { connection } = useConnection();
-  const wallet = useWallet();
+  const { connection, providerMut } = useSolana();
+  const wallet = useConnectedWallet();
 
   const { isOpen: confirming, onOpen, onClose } = useDisclosure();
   const [userAccount, setUserAccount] = useState<TokenAccount>();
@@ -65,7 +67,7 @@ const JungleProvider: React.FC = ({ children }) => {
    * Fetches the animals owned by the user
    */
   const fetchAnimals = useCallback(async () => {
-    if (!connection || !wallet.publicKey) return;
+    if (!connection || !wallet || !wallet.publicKey) return;
 
     try {
       const owned = await Metadata.findDataByOwner(
@@ -92,7 +94,7 @@ const JungleProvider: React.FC = ({ children }) => {
     } catch (err) {
       console.log("Failed fetching owned tokens", err);
     }
-  }, [wallet.publicKey, connection]);
+  }, [wallet, connection]);
 
   useEffect(() => {
     if (!animals) fetchAnimals();
@@ -102,7 +104,7 @@ const JungleProvider: React.FC = ({ children }) => {
    * Fetches the animals staked by the user
    */
   const fetchStakedAnimals = useCallback(async () => {
-    if (!connection || !wallet.publicKey) return;
+    if (!connection || !wallet || !wallet.publicKey) return;
 
     const program = new anchor.Program(idl as anchor.Idl, programID, provider);
 
@@ -135,7 +137,7 @@ const JungleProvider: React.FC = ({ children }) => {
     } catch (err) {
       console.log("Failed fetching owned tokens", err);
     }
-  }, [provider, wallet.publicKey, connection]);
+  }, [provider, wallet, connection]);
 
   useEffect(() => {
     if (!stakedAnimals) fetchStakedAnimals();
@@ -151,6 +153,8 @@ const JungleProvider: React.FC = ({ children }) => {
       [Buffer.from("jungle"), constants.jungleKey.toBuffer()],
       programID
     );
+
+    console.log(jungleAddress.toString())
 
     const fetchedJungle = await program.account.jungle.fetch(jungleAddress);
 
@@ -177,7 +181,8 @@ const JungleProvider: React.FC = ({ children }) => {
       if (!jungle) return;
 
       return (
-        ((Math.min(jungle.maximumRarity.toNumber(), animal.rarity) / jungle.maximumRarity.toNumber()) *
+        ((Math.min(jungle.maximumRarity.toNumber(), animal.rarity) /
+          jungle.maximumRarity.toNumber()) *
           (jungle.maximumRarityMultiplier.toNumber() - 10000) +
           10000) /
         10000
@@ -252,7 +257,7 @@ const JungleProvider: React.FC = ({ children }) => {
    * Fetches the staking rewards account
    */
   const fetchUserAccount = useCallback(async () => {
-    if (!jungle || !connection || !wallet.publicKey) return;
+    if (!jungle || !connection || !wallet || !wallet.publicKey) return;
 
     try {
       const associatedAddress = await Token.getAssociatedTokenAddress(
@@ -278,27 +283,18 @@ const JungleProvider: React.FC = ({ children }) => {
   }, [fetchUserAccount]);
 
   const createAccount = useCallback(async () => {
-    if (!wallet.publicKey || !wallet.signTransaction || !jungle) return;
+    if (!wallet || !wallet.publicKey || !wallet.signTransaction || !jungle || !providerMut)
+      return;
 
     onOpen();
 
-    const tokenAccountAddress = await findTokenAddress(
-      wallet.publicKey,
-      jungle.mint
-    );
-
     try {
-      await wallet.sendTransaction(
-        new anchor.web3.Transaction().add(
-          Token.createInitAccountInstruction(
-            TOKEN_PROGRAM_ID,
-            jungle.mint,
-            tokenAccountAddress,
-            wallet.publicKey
-          )
-        ),
-        connection
-      );
+      await createTokenAccount({
+        provider: providerMut,
+        mint: jungle.mint,
+        owner: wallet.publicKey,
+        payer: wallet.publicKey
+      })
       toast({
         title: "Account creation successful",
         description: `Successfully created an account`,
@@ -320,7 +316,7 @@ const JungleProvider: React.FC = ({ children }) => {
     } finally {
       onClose();
     }
-  }, [jungle, connection, toast, wallet, onClose, onOpen, fetchUserAccount]);
+  }, [jungle, providerMut, toast, wallet, onClose, onOpen, fetchUserAccount]);
 
   const stakeAnimal = useCallback(
     async (animal: Animal) => {
