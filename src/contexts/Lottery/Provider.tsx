@@ -62,7 +62,6 @@ const LotteryProvider: React.FC = ({ children }) => {
       [Buffer.from("lottery"), constants.lotteryKey.toBuffer()],
       programID
     );
-    console.log(lotteryAddress.toString());
 
     const fetchedLottery = await program.account.lottery.fetch(lotteryAddress);
 

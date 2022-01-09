@@ -61,10 +61,10 @@ const mainnetConstants = {
     "So11111111111111111111111111111111111111112"
   ),
   jungleKey: new anchor.web3.PublicKey(
-    "CRKdpEtK7wkyLNNk1uXEBMSWkYbH2Arni9V3GWeHVZYk"
+    "5fkaiL886wsZSBPJKG77SxUMsaKFJ4tyLD5bw2jpdMfH"
   ),
   lotteryKey: new anchor.web3.PublicKey(
-    "22Py81kKNtSvkYBYUuE7419LcmeA6siUJifUxinVZiqS"
+    "2w6hdN1jfHxF44ksb4ZGnf3NQxujNjbRZc62xwP4RBk2"
   ),
   metadata: mainnetMetadata as any as StaticMetadata[],
 };

@@ -31,11 +31,16 @@ const Lottery: React.FC = () => {
   const formatTime = useCallback(() => {
     if (!currentRound || !lottery || !now) return null;
 
-    const difference = currentRound.start
-      .add(lottery.period)
-      .sub(new BN(now))
-      .toNumber();
-    const days = Math.floor((difference / (60 * 60 * 24)) % 7);
+    let difference;
+    if (currentRound.start.toNumber() > now) {
+      difference = currentRound.start.sub(new BN(now)).toNumber();
+    } else {
+      difference = currentRound.start
+        .add(lottery.period)
+        .sub(new BN(now))
+        .toNumber();
+    }
+    const days = Math.floor(difference / (60 * 60 * 24));
     const hours = Math.floor((difference / (60 * 60)) % 24);
     const minutes = Math.floor((difference / 60) % 60);
     const seconds = Math.floor(difference % 60);

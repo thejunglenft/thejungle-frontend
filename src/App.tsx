@@ -75,8 +75,9 @@ const WalletProviders: React.FC = ({ children }) => {
       initialStep={ModalStep.Select}
       defaultNetwork={network}
       networkConfigs={{
-        "mainnet-beta": { name: "RunNode", endpoint: endpoint }
+        "devnet": { name: "RunNode", endpoint: endpoint }
       }}
+      commitment="confirmed"
     >
       <WalletProvider wallets={wallets} onError={onError}>
         <WalletModalProvider>{children}</WalletModalProvider>
