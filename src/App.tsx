@@ -3,10 +3,7 @@ import { Route, HashRouter as Router, Routes } from "react-router-dom";
 import { ChakraProvider, useToast } from "@chakra-ui/react";
 import { WalletAdapterNetwork, WalletError } from "@solana/wallet-adapter-base";
 import { WalletKitProvider } from "@gokiprotocol/walletkit";
-import {
-  ConnectionProvider,
-  WalletProvider,
-} from "@solana/wallet-adapter-react";
+import { WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
   getLedgerWallet,
@@ -78,8 +75,7 @@ const WalletProviders: React.FC = ({ children }) => {
       initialStep={ModalStep.Select}
       defaultNetwork={network}
       networkConfigs={{
-        "mainnet-beta": { name: "RunNode", endpoint: endpoint },
-        devnet: { name: "RunNode", endpoint: endpoint },
+        "mainnet-beta": { name: "RunNode", endpoint: endpoint }
       }}
     >
       <WalletProvider wallets={wallets} onError={onError}>

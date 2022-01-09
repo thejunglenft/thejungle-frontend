@@ -5,7 +5,7 @@ import mainnetMetadata from "./mainnetMetadata.json";
 import devnetMetadata from "./devnetMetadata.json";
 import { MetadataJson } from "@metaplex/js";
 
-const MAINNET = false;
+const MAINNET = true;
 
 export type StaticMetadata = {
   metadata: {
@@ -61,10 +61,10 @@ const mainnetConstants = {
     "So11111111111111111111111111111111111111112"
   ),
   jungleKey: new anchor.web3.PublicKey(
-    "BomSWAVr2Ab8CngV2zWbxiBP6fBDPfNM2sFimAUfgvWP"
+    "CRKdpEtK7wkyLNNk1uXEBMSWkYbH2Arni9V3GWeHVZYk"
   ),
   lotteryKey: new anchor.web3.PublicKey(
-    "EJBKqVd4CKTbZCqh2RBoQbxEMUTeCRQdasee79Xx9DZP"
+    "22Py81kKNtSvkYBYUuE7419LcmeA6siUJifUxinVZiqS"
   ),
   metadata: mainnetMetadata as any as StaticMetadata[],
 };

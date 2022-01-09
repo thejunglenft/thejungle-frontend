@@ -27,7 +27,7 @@ const programID = new PublicKey(idl.metadata.address);
 
 const LotteryProvider: React.FC = ({ children }) => {
   const toast = useToast();
-  const { connection } = useSolana();
+  const { providerMut } = useSolana();
   const wallet = useConnectedWallet();
   const { jungle, userAccount, fetchUserAccount } = useJungle();
 
@@ -39,18 +39,19 @@ const LotteryProvider: React.FC = ({ children }) => {
     []
   );
 
-  const provider = useMemo(
-    () =>
-      new anchor.Provider(connection, wallet as any, {
-        preflightCommitment: "confirmed",
-      }),
-    [connection, wallet]
-  );
+  const provider = useMemo(() => {
+    if (!providerMut) return;
+    return new anchor.Provider(providerMut.connection, wallet as any, {
+      preflightCommitment: "confirmed",
+    });
+  }, [providerMut, wallet]);
 
   /**
    * Fetches the lottery
    */
   const fetchLottery = useCallback(async () => {
+    if (!provider) return;
+
     const program = new Program<LotteryProgram>(
       LotteryIdl,
       programID,
@@ -61,6 +62,7 @@ const LotteryProvider: React.FC = ({ children }) => {
       [Buffer.from("lottery"), constants.lotteryKey.toBuffer()],
       programID
     );
+    console.log(lotteryAddress.toString());
 
     const fetchedLottery = await program.account.lottery.fetch(lotteryAddress);
 
@@ -86,7 +88,7 @@ const LotteryProvider: React.FC = ({ children }) => {
    */
   const fetchRound = useCallback(
     async (index: number) => {
-      if (!lottery) return;
+      if (!lottery || !provider) return;
 
       const program = new Program<LotteryProgram>(
         LotteryIdl,
@@ -132,7 +134,7 @@ const LotteryProvider: React.FC = ({ children }) => {
    * Fetches the user participations
    */
   const fetchUserParticipations = useCallback(async () => {
-    if (!wallet || !wallet.publicKey || !lottery) return;
+    if (!wallet || !wallet.publicKey || !lottery || !provider) return;
 
     const program = new Program<LotteryProgram>(
       LotteryIdl,
@@ -183,7 +185,7 @@ const LotteryProvider: React.FC = ({ children }) => {
    * Fetch the amount of SOL currently waiting for the next round
    */
   const fetchNextPot = useCallback(async () => {
-    if (!lottery) return;
+    if (!lottery || !provider) return;
     setNextPot(
       ((await provider.connection.getBalance(lottery.escrow)) -
         lottery.unclaimedPot.toNumber()) /
@@ -200,7 +202,7 @@ const LotteryProvider: React.FC = ({ children }) => {
    * This can be called only after the previous round expires
    */
   const newLotteryRound = useCallback(async () => {
-    if (!wallet || !wallet.publicKey || !lottery) return;
+    if (!wallet || !wallet.publicKey || !lottery || !provider) return;
 
     onOpen();
 
@@ -341,7 +343,14 @@ const LotteryProvider: React.FC = ({ children }) => {
 
   const participate = useCallback(
     async (spendings: BN[]) => {
-      if (!wallet || !wallet.publicKey || !lottery || !jungle || !userAccount)
+      if (
+        !wallet ||
+        !wallet.publicKey ||
+        !lottery ||
+        !jungle ||
+        !userAccount ||
+        !provider
+      )
         return;
 
       onOpen();
@@ -454,7 +463,14 @@ const LotteryProvider: React.FC = ({ children }) => {
 
   const claimParticipation = useCallback(
     async (index: number) => {
-      if (!wallet || !wallet.publicKey || !lottery || !jungle || !userAccount)
+      if (
+        !wallet ||
+        !wallet.publicKey ||
+        !lottery ||
+        !jungle ||
+        !userAccount ||
+        !provider
+      )
         return;
 
       onOpen();

@@ -44,13 +44,12 @@ const JungleProvider: React.FC = ({ children }) => {
   const [animals, setAnimals] = useState<Animal[]>();
   const [stakedAnimals, setStakedAnimals] = useState<Animal[]>();
 
-  const provider = useMemo(
-    () =>
-      new anchor.Provider(connection, wallet as any, {
-        preflightCommitment: "confirmed",
-      }),
-    [connection, wallet]
-  );
+  const provider = useMemo(() => {
+    if (!providerMut) return;
+    return new anchor.Provider(providerMut?.connection, wallet as any, {
+      preflightCommitment: "confirmed",
+    });
+  }, [providerMut, wallet]);
 
   const tree = useMemo(() => {
     const leaves = buildLeaves(
@@ -147,14 +146,13 @@ const JungleProvider: React.FC = ({ children }) => {
    * Fetches the jungle
    */
   const fetchJungle = useCallback(async () => {
+    if (!provider) return;
     const program = new Program<JungleProgram>(JundleIdl, programID, provider);
 
     const [jungleAddress] = await PublicKey.findProgramAddress(
       [Buffer.from("jungle"), constants.jungleKey.toBuffer()],
       programID
     );
-
-    console.log(jungleAddress.toString())
 
     const fetchedJungle = await program.account.jungle.fetch(jungleAddress);
 
@@ -283,7 +281,13 @@ const JungleProvider: React.FC = ({ children }) => {
   }, [fetchUserAccount]);
 
   const createAccount = useCallback(async () => {
-    if (!wallet || !wallet.publicKey || !wallet.signTransaction || !jungle || !providerMut)
+    if (
+      !wallet ||
+      !wallet.publicKey ||
+      !wallet.signTransaction ||
+      !jungle ||
+      !providerMut
+    )
       return;
 
     onOpen();
@@ -293,8 +297,8 @@ const JungleProvider: React.FC = ({ children }) => {
         provider: providerMut,
         mint: jungle.mint,
         owner: wallet.publicKey,
-        payer: wallet.publicKey
-      })
+        payer: wallet.publicKey,
+      });
       toast({
         title: "Account creation successful",
         description: `Successfully created an account`,
