@@ -69,12 +69,12 @@ const Lottery: React.FC = () => {
               Current round {currentRound.index.toNumber()}
             </Heading>
             <Heading textAlign="center" size="md">
-              Jackpot is worth{" "}
+              This round's jackpot is worth{" "}
               {currentRound.pot.div(new BN(10 ** 9)).toNumber()} SOL
             </Heading>
             {now &&
             lottery.lastTimestamp.add(lottery.period).toNumber() > now ? (
-              <Heading textAlign="center" size="md">
+              <Heading textAlign="center" size="sm">
                 Next round starts in {formatTime()} and its pot is currently{" "}
                 {nextPot || 0} SOL
               </Heading>

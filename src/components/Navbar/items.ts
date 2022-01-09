@@ -22,6 +22,12 @@ const NAV_ITEMS: Array<NavItem> = [
         href: "https://discord.gg/MN3c63Sn",
         newTab: true,
       },
+      {
+        label: "Github",
+        subLabel: "The Jungle NFT Github repository",
+        href: "https://github.com/thejunglenft",
+        newTab: true,
+      },
     ],
   },
 ];
