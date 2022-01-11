@@ -19,7 +19,7 @@ const Home: React.FC = () => {
         spacing={{ base: 8, md: 10 }}
       >
         <Image src={hero} />
-        <Text color={"gray.500"} maxW={"3xl"}>
+        <Text color={"white"} maxW={"3xl"}>
           The Jungle is a collection of 1,555 pixel animals living on Solana
           blockchain. With over 50 unique characters belonging to 8 factions,
           our aim is to bring together the many DAOs in the Solana eco-system

@@ -11,9 +11,9 @@ import DesktopSubNav from "./DesktopSubNav";
 import NAV_ITEMS from "./items";
 
 const DesktopNav = () => {
-  const linkColor = useColorModeValue("gray.600", "gray.200");
-  const linkHoverColor = useColorModeValue("gray.800", "white");
-  const popoverContentBgColor = useColorModeValue("white", "gray.800");
+  const linkColor = useColorModeValue("gray.200", "gray.600");
+  const linkHoverColor = useColorModeValue("white", "gray.800");
+  const popoverContentBgColor = useColorModeValue("gray.800", "white");
 
   return (
     <Stack direction={"row"} spacing={4}>

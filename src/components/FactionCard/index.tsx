@@ -44,6 +44,7 @@ const FactionCard: React.FC<TokenCardProps> = ({ faction }) => {
       w="280px"
       h="100%"
       pt="0"
+      background="white"
       direction="column"
       alignItems="center"
       justifyContent="center"

@@ -66,7 +66,7 @@ const JungleProvider: React.FC = ({ children }) => {
    * Fetches the animals owned by the user
    */
   const fetchAnimals = useCallback(async () => {
-    if (!connection || !wallet || !wallet.publicKey) return;
+    if (!connection || !wallet) return;
 
     try {
       const owned = await Metadata.findDataByOwner(
@@ -120,7 +120,11 @@ const JungleProvider: React.FC = ({ children }) => {
       setStakedAnimals(
         staked
           .map((e) => e.account.mint.toString())
-          .filter((e) => collectionMints.includes(e))
+          .filter(
+            (e) =>
+              collectionMints.includes(e) &&
+              !animals?.map((a) => a.mint).includes(e)
+          )
           .map((e) => {
             const metadataItem = constants.metadata.filter(
               (f) => f.mint === e
@@ -136,7 +140,7 @@ const JungleProvider: React.FC = ({ children }) => {
     } catch (err) {
       console.log("Failed fetching owned tokens", err);
     }
-  }, [provider, wallet, connection]);
+  }, [animals, provider, wallet, connection]);
 
   useEffect(() => {
     if (!stakedAnimals) fetchStakedAnimals();
@@ -236,7 +240,7 @@ const JungleProvider: React.FC = ({ children }) => {
           mint: mint,
           metadata: metadataItem.arweave,
           rarity: fetchedAnimal.rarity.toString(),
-          faction: fetchedAnimal.faction,
+          faction: metadataItem.faction,
           lastClaim: new Date(fetchedAnimal.lastClaim.toNumber() * 1000),
         };
       } catch (err) {
@@ -466,7 +470,7 @@ const JungleProvider: React.FC = ({ children }) => {
       );
 
       try {
-        // Create an reward account if the user does not have one
+        // Create a reward account if the user does not have one
         const instructions = userAccount
           ? []
           : [
@@ -498,6 +502,7 @@ const JungleProvider: React.FC = ({ children }) => {
             },
           })
         );
+
         await program.rpc.unstakeAnimal({
           accounts: {
             jungle: jungleAddress,
@@ -655,6 +660,14 @@ const JungleProvider: React.FC = ({ children }) => {
     ]
   );
 
+  const refreshAnimals = useCallback(async () => {
+    setAnimals([]);
+    setStakedAnimals([]);
+    await fetchJungle();
+    await fetchAnimals();
+    await fetchStakedAnimals();
+  }, [fetchJungle, fetchStakedAnimals, fetchAnimals, setAnimals, setStakedAnimals]);
+
   return (
     <Context.Provider
       value={{
@@ -665,6 +678,7 @@ const JungleProvider: React.FC = ({ children }) => {
         getRarityMultiplier,
         getPendingStakingRewards,
         fetchAnimal,
+        refreshAnimals,
         fetchUserAccount,
         createAccount,
         stakeAnimal,

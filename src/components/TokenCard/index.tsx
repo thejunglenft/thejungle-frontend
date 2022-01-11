@@ -1,13 +1,22 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Flex, Box, Image, Text, HStack, Button, Spacer } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  Image,
+  Text,
+  HStack,
+  Button,
+  Spacer,
+} from "@chakra-ui/react";
 import { Animal } from "contexts/Jungle";
 import useJungle from "hooks/useJungle";
 
 interface TokenCardProps {
   token: Animal;
+  stakable?: boolean;
 }
 
-const TokenCard: React.FC<TokenCardProps> = ({ token }) => {
+const TokenCard: React.FC<TokenCardProps> = ({ token, stakable }) => {
   const {
     getRarityMultiplier,
     getPendingStakingRewards,
@@ -54,6 +63,7 @@ const TokenCard: React.FC<TokenCardProps> = ({ token }) => {
       w="280px"
       h="100%"
       pt="0"
+      background="white"
       direction="column"
       alignItems="center"
       justifyContent="center"
@@ -61,7 +71,13 @@ const TokenCard: React.FC<TokenCardProps> = ({ token }) => {
       rounded="lg"
       shadow="lg"
     >
-      <Image src={token.metadata.image} rounded="lg" w="280px" maxH="400px" top="0" />
+      <Image
+        src={token.metadata.image}
+        rounded="lg"
+        w="280px"
+        maxH="400px"
+        top="0"
+      />
       <Text fontSize="2xl" fontWeight="bold" w="280px" textAlign="center">
         {token.metadata.name}
       </Text>
@@ -76,11 +92,13 @@ const TokenCard: React.FC<TokenCardProps> = ({ token }) => {
             <Text>Pending rewards:</Text>
             <Spacer />
             <Text>
-              {getPendingStakingRewards(augmentedAnimal, stakingPeriod).toFixed(2)}
+              {getPendingStakingRewards(augmentedAnimal, stakingPeriod).toFixed(
+                2
+              )}
             </Text>
           </Flex>
         )}
-        {augmentedAnimal?.lastClaim ? (
+        {augmentedAnimal?.lastClaim && stakable ? (
           <HStack>
             <Button isFullWidth colorScheme="blue" onClick={handleUnstake}>
               Unstake

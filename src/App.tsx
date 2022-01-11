@@ -3,6 +3,7 @@ import { Route, HashRouter as Router, Routes } from "react-router-dom";
 import { ChakraProvider, useToast } from "@chakra-ui/react";
 import { WalletAdapterNetwork, WalletError } from "@solana/wallet-adapter-base";
 import { WalletKitProvider } from "@gokiprotocol/walletkit";
+import { ModalStep } from "@gokiprotocol/walletkit/dist/cjs/components/WalletSelectorModal";
 import { WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
@@ -24,7 +25,6 @@ import { clusterApiUrl } from "@solana/web3.js";
 import Lottery from "views/Lottery";
 import { LotteryProvider } from "contexts/Lottery";
 import Admin from "views/Admin";
-import { ModalStep } from "@gokiprotocol/walletkit/dist/cjs/components/WalletSelectorModal";
 
 const WalletProviders: React.FC = ({ children }) => {
   const network = constants.mainnet

@@ -64,7 +64,7 @@ export const factionToNumber = (faction: string) => {
     case "Mythic":
       return 8;
     default:
-      throw new Error("unknown faction")
+      throw new Error(`unknown faction: ${faction}`)
   }
 };
 

@@ -67,9 +67,9 @@ const Lottery: React.FC = () => {
   return (
     <Flex direction="column" w="100%" align="center" p="10px">
       <Box>
-        <Heading textAlign="center">Lottery</Heading>
+        <Heading textAlign="center" color="white">Lottery</Heading>
         {lottery && currentRound && (
-          <Box align="center">
+          <Box align="center" color="white">
             <Heading textAlign="center" size="lg">
               Current round {currentRound.index.toNumber()}
             </Heading>

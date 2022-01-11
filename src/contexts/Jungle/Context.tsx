@@ -9,6 +9,7 @@ const Context = createContext<ContextValues>({
   getRarityMultiplier: () => 0,
   getPendingStakingRewards: () => 0,
   fetchAnimal: (mint: PublicKey) => new Promise(() => {}),
+  refreshAnimals: () => new Promise(() => {}),
   fetchUserAccount: () => new Promise(() => {}),
   createAccount: () => new Promise(() => {}),
   stakeAnimal: () => new Promise(() => {}),

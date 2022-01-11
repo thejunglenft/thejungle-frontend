@@ -14,7 +14,7 @@ import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
 import WalletButton from "./WalletButton";
 
-import logo from "../../assets/logo192.png";
+import logo from "../../assets/logo192.9904efa0.png";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
@@ -22,8 +22,8 @@ export default function WithSubnavigation() {
   return (
     <Box>
       <Flex
-        bg={useColorModeValue("white", "gray.800")}
-        color={useColorModeValue("gray.600", "white")}
+        bg={useColorModeValue("gray.800", "gray.800")}
+        color={useColorModeValue("gray.500", "white")}
         minH={"60px"}
         py={{ base: 2 }}
         px={{ base: 4 }}
@@ -47,7 +47,7 @@ export default function WithSubnavigation() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-          <Image src={logo} boxSize={8} color={useColorModeValue("gray.600", "white")}/>
+          <Image src={logo} boxSize={8} color={useColorModeValue("white", "white")}/>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
             <DesktopNav />
