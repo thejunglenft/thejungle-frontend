@@ -139,8 +139,9 @@ const JungleProvider: React.FC = ({ children }) => {
   }, [provider, wallet, connection]);
 
   useEffect(() => {
-    fetchStakedAnimals();
-  }, [fetchStakedAnimals]);
+    if(!stakedAnimals)
+      fetchStakedAnimals();
+  }, [stakedAnimals, fetchStakedAnimals]);
 
   /**
    * Fetches the jungle

@@ -26,7 +26,7 @@ const Staking: React.FC = () => {
             Refresh
           </Button>
         </Flex>
-        {animals.length > 0 ? (
+        {animals.filter(e => !e.lastClaim).length > 0 ? (
           <Wrap justify="center">
             {animals.map((e) => (
               <TokenCard key={e.mint.toString()} token={e} />
