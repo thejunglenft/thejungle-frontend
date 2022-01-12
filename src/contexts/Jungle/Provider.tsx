@@ -103,7 +103,7 @@ const JungleProvider: React.FC = ({ children }) => {
    * Fetches the animals staked by the user
    */
   const fetchStakedAnimals = useCallback(async () => {
-    if (!connection || !wallet || !wallet.publicKey) return;
+    if (!connection || !wallet) return;
 
     const program = new anchor.Program(idl as anchor.Idl, programID, provider);
 
@@ -120,11 +120,7 @@ const JungleProvider: React.FC = ({ children }) => {
       setStakedAnimals(
         staked
           .map((e) => e.account.mint.toString())
-          .filter(
-            (e) =>
-              collectionMints.includes(e) &&
-              !animals?.map((a) => a.mint).includes(e)
-          )
+          .filter((e) => collectionMints.includes(e))
           .map((e) => {
             const metadataItem = constants.metadata.filter(
               (f) => f.mint === e
@@ -140,11 +136,11 @@ const JungleProvider: React.FC = ({ children }) => {
     } catch (err) {
       console.log("Failed fetching owned tokens", err);
     }
-  }, [animals, provider, wallet, connection]);
+  }, [provider, wallet, connection]);
 
   useEffect(() => {
-    if (!stakedAnimals) fetchStakedAnimals();
-  }, [fetchStakedAnimals, stakedAnimals]);
+    fetchStakedAnimals();
+  }, [fetchStakedAnimals]);
 
   /**
    * Fetches the jungle
@@ -666,7 +662,13 @@ const JungleProvider: React.FC = ({ children }) => {
     await fetchJungle();
     await fetchAnimals();
     await fetchStakedAnimals();
-  }, [fetchJungle, fetchStakedAnimals, fetchAnimals, setAnimals, setStakedAnimals]);
+  }, [
+    fetchJungle,
+    fetchStakedAnimals,
+    fetchAnimals,
+    setAnimals,
+    setStakedAnimals,
+  ]);
 
   return (
     <Context.Provider

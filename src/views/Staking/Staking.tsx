@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Box, Button, Divider, Flex, Heading, Wrap } from "@chakra-ui/react";
 import { BiRefresh } from "react-icons/bi";
 
@@ -7,10 +7,6 @@ import TokenCard from "../../components/TokenCard";
 
 const Staking: React.FC = () => {
   const { animals, stakedAnimals, refreshAnimals } = useJungle();
-
-  const filteredStakedAnimals = useMemo(() => {
-    return stakedAnimals.filter(a => animals.map(e => e.mint).includes(a.mint))
-  }, [animals, stakedAnimals])
 
   return (
     <Flex direction="column" w="100%" align="center" p="10px">
@@ -49,9 +45,9 @@ const Staking: React.FC = () => {
             Your staked animals
           </Heading>
         </Flex>
-        {filteredStakedAnimals.length > 0 ? (
+        {stakedAnimals.length > 0 ? (
           <Wrap justify="center">
-            {filteredStakedAnimals.map((e) => (
+            {stakedAnimals.map((e) => (
               <TokenCard key={e.mint.toString()} token={e} stakable />
             ))}
           </Wrap>
