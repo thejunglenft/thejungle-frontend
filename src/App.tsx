@@ -32,10 +32,11 @@ const WalletProviders: React.FC = ({ children }) => {
     : WalletAdapterNetwork.Devnet;
 
   const devnetEnpoint = useMemo(() => clusterApiUrl(network), [network]);
-  const endpoint = constants.mainnet
-    ? "https://connect.runnode.com/?apikey=" +
-      process.env.REACT_APP_RUN_NODE_API_KEY
-    : devnetEnpoint;
+  // const endpoint = constants.mainnet
+  //   ? "https://connect.runnode.com/?apikey=" +
+  //     process.env.REACT_APP_RUN_NODE_API_KEY
+  //   : devnetEnpoint;
+  const endpoint = devnetEnpoint
   const toast = useToast();
 
   const wallets = useMemo(
