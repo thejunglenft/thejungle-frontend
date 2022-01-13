@@ -48,7 +48,6 @@ const JungleProvider: React.FC = ({ children }) => {
     if (!providerMut) return;
     return new anchor.Provider(providerMut?.connection, wallet as any, {
       preflightCommitment: "confirmed",
-      skipPreflight: true,
     });
   }, [providerMut, wallet]);
 
@@ -89,6 +88,11 @@ const JungleProvider: React.FC = ({ children }) => {
               rarity: metadataItem.rarity,
               faction: metadataItem.faction,
             };
+          })
+          .sort((a, b) => {
+            const na = Number(a.metadata.name.split("#")[1]);
+            const nb = Number(b.metadata.name.split("#")[1]);
+            return na - nb;
           })
       );
     } catch (err) {
@@ -132,6 +136,11 @@ const JungleProvider: React.FC = ({ children }) => {
               rarity: metadataItem.rarity,
               faction: metadataItem.faction,
             };
+          })
+          .sort((a, b) => {
+            const na = Number(a.metadata.name.split("#")[1]);
+            const nb = Number(b.metadata.name.split("#")[1]);
+            return na - nb;
           })
       );
     } catch (err) {
@@ -363,8 +372,6 @@ const JungleProvider: React.FC = ({ children }) => {
       );
 
       console.log(
-        bumps,
-        tree.getProofArray(indexStaked),
         animal.rarity,
         factionToNumber(animal.faction),
         Object.entries({

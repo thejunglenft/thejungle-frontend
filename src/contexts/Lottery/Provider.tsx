@@ -43,7 +43,6 @@ const LotteryProvider: React.FC = ({ children }) => {
     if (!providerMut) return;
     return new anchor.Provider(providerMut.connection, wallet as any, {
       preflightCommitment: "confirmed",
-      skipPreflight: true
     });
   }, [providerMut, wallet]);
 
