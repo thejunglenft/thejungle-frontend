@@ -374,6 +374,8 @@ const JungleProvider: React.FC = ({ children }) => {
       console.log(
         animal.rarity,
         factionToNumber(animal.faction),
+        jungle.key.toString(),
+        indexStaked,
         Object.entries({
           jungle: jungleAddress,
           escrow: jungle.escrow,
@@ -386,9 +388,7 @@ const JungleProvider: React.FC = ({ children }) => {
           clock: SYSVAR_CLOCK_PUBKEY,
           rent: SYSVAR_RENT_PUBKEY,
           systemProgram: SystemProgram.programId,
-        }).map((e) => [e[0], e[1].toString()]),
-        jungle.key.toString(),
-        indexStaked
+        }).map((e) => [e[0], e[1].toString()])
       );
 
       try {

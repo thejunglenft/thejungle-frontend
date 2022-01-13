@@ -1,20 +1,8 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import { Route, HashRouter as Router, Routes } from "react-router-dom";
 import { ChakraProvider, useToast } from "@chakra-ui/react";
 import { WalletAdapterNetwork, WalletError } from "@solana/wallet-adapter-base";
 import { WalletKitProvider } from "@gokiprotocol/walletkit";
-import { ModalStep } from "@gokiprotocol/walletkit/dist/cjs/components/WalletSelectorModal";
-import { WalletProvider } from "@solana/wallet-adapter-react";
-import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import {
-  getLedgerWallet,
-  getPhantomWallet,
-  getSlopeWallet,
-  getSolflareWallet,
-  getSolletExtensionWallet,
-  getSolletWallet,
-  getTorusWallet,
-} from "@solana/wallet-adapter-wallets";
 
 import Navbar from "./components/Navbar";
 import Home from "./views/Home";
@@ -36,23 +24,8 @@ const WalletProviders: React.FC = ({ children }) => {
   //   ? "https://connect.runnode.com/?apikey=" +
   //     process.env.REACT_APP_RUN_NODE_API_KEY
   //   : devnetEnpoint;
-  const endpoint = "https://ssc-dao.genesysgo.net"
+  const endpoint = "https://ssc-dao.genesysgo.net";
   const toast = useToast();
-
-  const wallets = useMemo(
-    () => [
-      getPhantomWallet(),
-      getSlopeWallet(),
-      getSolflareWallet(),
-      getTorusWallet({
-        options: { clientId: "Get a client ID @ https://developer.tor.us" },
-      }),
-      getLedgerWallet(),
-      getSolletWallet({ network }),
-      getSolletExtensionWallet({ network }),
-    ],
-    [network]
-  );
 
   const onError = useCallback(
     (error: WalletError) =>
@@ -73,16 +46,14 @@ const WalletProviders: React.FC = ({ children }) => {
       app={{
         name: "The Jungle",
       }}
-      initialStep={ModalStep.Select}
-      defaultNetwork={network}
       networkConfigs={{
-        "mainnet-beta": { name: "RunNode", endpoint: endpoint }
+        "mainnet-beta": { name: "Mainnet Beta", endpoint: endpoint },
       }}
+      defaultNetwork={network}
       commitment="confirmed"
+      onError={(e) => onError(new WalletError(e.message, e))}
     >
-      <WalletProvider wallets={wallets} onError={onError}>
-        <WalletModalProvider>{children}</WalletModalProvider>
-      </WalletProvider>
+      {children}
     </WalletKitProvider>
   );
 };

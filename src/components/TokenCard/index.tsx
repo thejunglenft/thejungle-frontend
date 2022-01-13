@@ -44,7 +44,7 @@ const TokenCard: React.FC<TokenCardProps> = ({ token, stakable }) => {
 
   const handleStake = useCallback(async () => {
     if (!augmentedAnimal) return;
-    console.log("Staking", augmentedAnimal.mint, token.mint)
+    console.log("Staking", augmentedAnimal.mint.toString(), token.mint.toString())
     await stakeAnimal(augmentedAnimal);
   }, [augmentedAnimal, token, stakeAnimal]);
 
