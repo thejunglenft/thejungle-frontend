@@ -21,7 +21,7 @@ import Home from "./views/Home";
 import { JungleProvider } from "contexts/Jungle";
 import Staking from "views/Staking";
 import constants from "./constants";
-import { clusterApiUrl } from "@solana/web3.js";
+// import { clusterApiUrl } from "@solana/web3.js";
 import Lottery from "views/Lottery";
 import { LotteryProvider } from "contexts/Lottery";
 import Admin from "views/Admin";
@@ -31,12 +31,12 @@ const WalletProviders: React.FC = ({ children }) => {
     ? WalletAdapterNetwork.Mainnet
     : WalletAdapterNetwork.Devnet;
 
-  const devnetEnpoint = useMemo(() => clusterApiUrl(network), [network]);
-  const endpoint = constants.mainnet
-    ? "https://connect.runnode.com/?apikey=" +
-      process.env.REACT_APP_RUN_NODE_API_KEY
-    : devnetEnpoint;
-  // const endpoint = "https://rpc.ankr.com/solana
+  // const devnetEnpoint = useMemo(() => clusterApiUrl(network), [network]);
+  // const endpoint = constants.mainnet
+  //   ? "https://connect.runnode.com/?apikey=" +
+  //     process.env.REACT_APP_RUN_NODE_API_KEY
+  //   : devnetEnpoint;
+  const endpoint = "https://ssc-dao.genesysgo.net"
   const toast = useToast();
 
   const wallets = useMemo(
