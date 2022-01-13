@@ -48,6 +48,7 @@ const JungleProvider: React.FC = ({ children }) => {
     if (!providerMut) return;
     return new anchor.Provider(providerMut?.connection, wallet as any, {
       preflightCommitment: "confirmed",
+      skipPreflight: true,
     });
   }, [providerMut, wallet]);
 
@@ -139,8 +140,7 @@ const JungleProvider: React.FC = ({ children }) => {
   }, [provider, wallet, connection]);
 
   useEffect(() => {
-    if(!stakedAnimals)
-      fetchStakedAnimals();
+    if (!stakedAnimals) fetchStakedAnimals();
   }, [stakedAnimals, fetchStakedAnimals]);
 
   /**
