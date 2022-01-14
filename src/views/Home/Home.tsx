@@ -1,14 +1,8 @@
 import React from "react";
-import {
-  Button,
-  Container,
-  Image,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Container, Image, Stack, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
-import hero from "../../assets/the_jungle.png"
+import hero from "../../assets/the_jungle.png";
 
 const Home: React.FC = () => {
   return (
@@ -19,13 +13,16 @@ const Home: React.FC = () => {
         spacing={{ base: 8, md: 10 }}
       >
         <Image src={hero} />
-        <Text color={"white"} maxW={"3xl"}>
-          The Jungle is a collection of 1,555 pixel animals living on Solana
-          blockchain. With over 50 unique characters belonging to 8 factions,
-          our aim is to bring together the many DAOs in the Solana eco-system
-          through co-operation, competition, staking rewards and striving to
-          make a positive change in the world.
-        </Text>
+        <Box background="gray.100" p="3" rounded="xl">
+          <Text color={"gray.900"} fontSize={"xl"}>
+            The Jungle is a collection of 1,555 pixel animals living on Solana
+            blockchain. <br />
+            With over 50 unique characters belonging to 8 factions, our aim is
+            to bring together the many DAOs in the Solana eco-system through
+            co-operation, competition, staking rewards and striving to make a
+            positive change in the world.
+          </Text>
+        </Box>
         <Stack spacing={6} direction={"row"}>
           <Button
             as={Link}
