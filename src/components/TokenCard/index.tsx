@@ -38,9 +38,14 @@ const TokenCard: React.FC<TokenCardProps> = ({ token, stakable }) => {
   }, [token, fetchAnimalStats]);
 
   useEffect(() => {
-    const interval = setInterval(() => setStakingPeriod(new Date()), 500);
+    const interval = setInterval(() => {
+      if (augmentedAnimal)
+        console.log(augmentedAnimal.metadata.name, getPendingStakingRewards(augmentedAnimal, new Date()));
+
+      setStakingPeriod(new Date());
+    }, 500);
     return () => clearInterval(interval);
-  }, [setStakingPeriod]);
+  }, [augmentedAnimal, getPendingStakingRewards, setStakingPeriod]);
 
   const handleStake = useCallback(async () => {
     if (!augmentedAnimal) return;
@@ -92,9 +97,10 @@ const TokenCard: React.FC<TokenCardProps> = ({ token, stakable }) => {
             <Text>Pending rewards:</Text>
             <Spacer />
             <Text>
-              {getPendingStakingRewards(augmentedAnimal, stakingPeriod).toPrecision(
-                5
-              )}
+              {getPendingStakingRewards(
+                augmentedAnimal,
+                stakingPeriod
+              ).toPrecision(5)}
             </Text>
           </Flex>
         )}

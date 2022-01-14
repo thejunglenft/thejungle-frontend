@@ -209,11 +209,9 @@ const JungleProvider: React.FC = ({ children }) => {
         .div(new anchor.BN(604800))
         .toNumber();
 
-      return (
-        (elapsed * emissionsPerSecond * animalMultiplier) /
-        jungle.animalsStaked.toNumber() /
-        10 ** 9
-      );
+      console.log(elapsed, emissionsPerSecond, animalMultiplier);
+
+      return (elapsed * emissionsPerSecond * animalMultiplier) / 10 ** 9;
     },
     [jungle, getRarityMultiplier]
   );
@@ -414,7 +412,7 @@ const JungleProvider: React.FC = ({ children }) => {
               rent: SYSVAR_RENT_PUBKEY,
               systemProgram: SystemProgram.programId,
             },
-            instructions: instructions
+            instructions: instructions,
           }
         );
 
