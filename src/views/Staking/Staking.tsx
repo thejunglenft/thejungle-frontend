@@ -5,8 +5,6 @@ import {
   Divider,
   Flex,
   Heading,
-  Link,
-  Text,
   Wrap,
 } from "@chakra-ui/react";
 import { BiRefresh } from "react-icons/bi";
@@ -34,20 +32,6 @@ const Staking: React.FC = () => {
           >
             Refresh
           </Button>
-        </Flex>
-        <Flex
-          justify="center"
-          background="blue.100"
-          border="2px"
-          borderColor="blue.200"
-          rounded="lg"
-          m="2"
-          p="2"
-        >
-          <Text mr="1">Can't stake an animal? Migrate it using</Text>
-          <Link href="https://raydium.io/migrate/" target="_blank">
-            <b>Raydium's migration tool</b>
-          </Link>
         </Flex>
         {animals.filter((e) => !e.lastClaim).length > 0 ? (
           <Wrap justify="center">
