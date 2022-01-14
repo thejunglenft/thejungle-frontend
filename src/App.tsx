@@ -75,12 +75,12 @@ function App() {
     <Providers>
       <Router>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/staking" element={<Staking />} />
-          <Route path="/lottery" element={<Lottery />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/staking" element={<Staking />} />
+            <Route path="/lottery" element={<Lottery />} />
+            <Route path="/admin" element={<Admin />} />
+          </Routes>
       </Router>
     </Providers>
   );

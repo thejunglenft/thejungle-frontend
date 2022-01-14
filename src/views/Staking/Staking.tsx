@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  Divider,
-  Flex,
-  Heading,
-  Wrap,
-} from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Heading, Wrap } from "@chakra-ui/react";
 import { BiRefresh } from "react-icons/bi";
 
 import useJungle from "../../hooks/useJungle";
@@ -16,7 +9,12 @@ const Staking: React.FC = () => {
   const { animals, stakedAnimals, refreshAnimals } = useJungle();
 
   return (
-    <Flex direction="column" w="100%" align="center" p="10px">
+    <Flex
+      direction="column"
+      w="100%"
+      align="center"
+      p="10px"
+    >
       <Box>
         <Flex justify="center">
           <Box verticalAlign="center">

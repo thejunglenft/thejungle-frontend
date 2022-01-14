@@ -8,13 +8,13 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
+import { useConnectedWallet } from "@saberhq/use-solana";
+import { BN } from "@project-serum/anchor";
 
 import useLottery from "hooks/useLottery";
 import { FACTIONS } from "../../constants";
-import { BN } from "@project-serum/anchor";
 import FactionCard from "components/FactionCard";
 import ParticipationCard from "components/ParticipationCard";
-import { useConnectedWallet } from "@saberhq/use-solana";
 
 const Lottery: React.FC = () => {
   const wallet = useConnectedWallet();
@@ -65,9 +65,16 @@ const Lottery: React.FC = () => {
   }, [newLotteryRound]);
 
   return (
-    <Flex direction="column" w="100%" align="center" p="10px">
+    <Flex
+      direction="column"
+      w="100%"
+      align="center"
+      p="10px"
+    >
       <Box>
-        <Heading textAlign="center" color="white">Lottery</Heading>
+        <Heading textAlign="center" color="white">
+          Lottery
+        </Heading>
         {lottery && currentRound && (
           <Box align="center" color="white">
             <Heading textAlign="center" size="lg">
