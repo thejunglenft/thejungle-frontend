@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.8528ecb0.chunk.css",
+    "main.css": "/static/css/main.63b4ee58.chunk.css",
     "main.js": "/static/js/main.a96e5e89.chunk.js",
     "main.js.map": "/static/js/main.a96e5e89.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.d29df981.js",
@@ -12,15 +12,16 @@
     "static/js/4.12fbe861.chunk.js": "/static/js/4.12fbe861.chunk.js",
     "static/js/4.12fbe861.chunk.js.map": "/static/js/4.12fbe861.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.8528ecb0.chunk.css.map": "/static/css/main.8528ecb0.chunk.css.map",
+    "static/css/main.63b4ee58.chunk.css.map": "/static/css/main.63b4ee58.chunk.css.map",
     "static/js/2.8540c6f8.chunk.js.LICENSE.txt": "/static/js/2.8540c6f8.chunk.js.LICENSE.txt",
     "static/media/logo192.9904efa0.2f3a314e.png": "/static/media/logo192.9904efa0.2f3a314e.png",
-    "static/media/the_jungle.d497567e.png": "/static/media/the_jungle.d497567e.png"
+    "static/media/the_jungle.d497567e.png": "/static/media/the_jungle.d497567e.png",
+    "static/media/index.css": "/static/media/video_image_13.e510cef8.jpeg"
   },
   "entrypoints": [
     "static/js/runtime-main.d29df981.js",
     "static/js/2.8540c6f8.chunk.js",
-    "static/css/main.8528ecb0.chunk.css",
+    "static/css/main.63b4ee58.chunk.css",
     "static/js/main.a96e5e89.chunk.js"
   ]
 }
