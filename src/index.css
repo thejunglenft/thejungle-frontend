@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url("https://github.com/thejunglenft/thejunglenft.github.io/blob/master/public/video_image_13.jpeg") !important;
+  background-image: url("./video_image_13.jpeg") !important;
 }
 
 code {
