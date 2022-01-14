@@ -334,7 +334,7 @@ const JungleProvider: React.FC = ({ children }) => {
 
   const stakeAnimal = useCallback(
     async (animal: Animal) => {
-      if (!wallet || !wallet.publicKey || !jungle) return;
+      if (!wallet || !jungle || !provider) return;
 
       onOpen();
 
@@ -367,28 +367,31 @@ const JungleProvider: React.FC = ({ children }) => {
         animal.mint,
         wallet.publicKey
       );
+
+      let instructions = [];
+      // Checking if the user has an associated token account
+      try {
+        new Token(
+          provider.connection,
+          animal.mint,
+          TOKEN_PROGRAM_ID,
+          null as any
+        ).getAccountInfo(stakerAccount);
+      } catch (err) {
+        instructions.push(
+          Token.createAssociatedTokenAccountInstruction(
+            ASSOCIATED_TOKEN_PROGRAM_ID,
+            TOKEN_PROGRAM_ID,
+            animal.mint,
+            stakerAccount,
+            wallet.publicKey,
+            wallet.publicKey
+          )
+        );
+      }
+
       const indexStaked = constants.metadata.findIndex(
         (e) => e.mint === animal.mint.toString()
-      );
-
-      console.log(
-        animal.rarity,
-        factionToNumber(animal.faction),
-        jungle.key.toString(),
-        indexStaked,
-        Object.entries({
-          jungle: jungleAddress,
-          escrow: jungle.escrow,
-          animal: animalAddress,
-          staker: wallet.publicKey,
-          mint: animal.mint,
-          stakerAccount: stakerAccount,
-          depositAccount: deposit,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          clock: SYSVAR_CLOCK_PUBKEY,
-          rent: SYSVAR_RENT_PUBKEY,
-          systemProgram: SystemProgram.programId,
-        }).map((e) => [e[0], e[1].toString()])
       );
 
       try {
@@ -411,6 +414,7 @@ const JungleProvider: React.FC = ({ children }) => {
               rent: SYSVAR_RENT_PUBKEY,
               systemProgram: SystemProgram.programId,
             },
+            instructions: instructions
           }
         );
 
@@ -527,21 +531,6 @@ const JungleProvider: React.FC = ({ children }) => {
               systemProgram: SystemProgram.programId,
             },
           })
-        );
-
-        console.log(
-          Object.entries({
-            jungle: jungleAddress,
-            escrow: jungle.escrow,
-            animal: animalAddress,
-            staker: wallet.publicKey,
-            mint: animal.mint,
-            stakerAccount: animalStakerAccount,
-            depositAccount: deposit,
-            tokenProgram: TOKEN_PROGRAM_ID,
-          }).map((e) => [e[0], e[1].toString()]),
-          jungle.key.toString(),
-          instructions.length
         );
 
         await program.rpc.unstakeAnimal({
