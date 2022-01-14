@@ -92,7 +92,7 @@ const TokenCard: React.FC<TokenCardProps> = ({ token, stakable }) => {
             <Text>Pending rewards:</Text>
             <Spacer />
             <Text>
-              {getPendingStakingRewards(augmentedAnimal, stakingPeriod).toFixed(
+              {getPendingStakingRewards(augmentedAnimal, stakingPeriod).toPrecision(
                 5
               )}
             </Text>
