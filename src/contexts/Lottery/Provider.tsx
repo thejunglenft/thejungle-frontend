@@ -148,7 +148,14 @@ const LotteryProvider: React.FC = ({ children }) => {
 
     try {
       // TODO: User filters to only fetch this player's participations
-      const participations = await program.account.lotteryParticipation.all();
+      const participations = await program.account.lotteryParticipation.all([
+        {
+          memcmp: {
+            bytes: wallet.publicKey.toString(),
+            offset: 9, // Discriminator + bump
+          },
+        },
+      ]);
       setUserParticipations(
         participations
           // Filter participations for this lottery only
@@ -158,6 +165,7 @@ const LotteryProvider: React.FC = ({ children }) => {
                 Buffer.from("participation"),
                 lottery.key.toBuffer(),
                 new BN(e.account.index).toArrayLike(Buffer, "le", 8),
+                wallet.publicKey.toBuffer(),
               ],
               programID
             );
