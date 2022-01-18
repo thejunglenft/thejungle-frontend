@@ -64,6 +64,8 @@ const Lottery: React.FC = () => {
     newLotteryRound();
   }, [newLotteryRound]);
 
+  console.log(currentRound?.pot.toString())
+
   return (
     <Flex
       direction="column"
@@ -82,7 +84,7 @@ const Lottery: React.FC = () => {
             </Heading>
             <Heading textAlign="center" size="md">
               This round's jackpot is worth{" "}
-              {currentRound.pot.div(new BN(10 ** 9)).toNumber()} SOL
+              {currentRound.pot.toNumber() / 10**9} SOL
             </Heading>
             {now &&
             lottery.lastTimestamp.add(lottery.period).toNumber() > now ? (
@@ -110,7 +112,7 @@ const Lottery: React.FC = () => {
         {userParticipations.length > 0 && (
           <>
             <Divider my="30px" />
-            <Heading textAlign="center" pb="3">
+            <Heading textAlign="center" pb="3" color="white">
               Your past participations
             </Heading>
             <VStack>

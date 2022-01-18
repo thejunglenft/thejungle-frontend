@@ -41,6 +41,7 @@ const ParticipationCard: React.FC<TokenCardProps> = ({ participation }) => {
       borderWidth="2px"
       rounded="lg"
       shadow="lg"
+      background="white"
     >
       <Heading>Round #{participation.index.toNumber()}</Heading>
       <Spacer />
