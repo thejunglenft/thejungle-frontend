@@ -3,10 +3,12 @@ import { useSolana } from "@saberhq/use-solana";
 import { createTokenAccount } from "@saberhq/token-utils";
 import { useConnectedWallet } from "@gokiprotocol/walletkit";
 import {
+  Keypair,
   PublicKey,
   SystemProgram,
   SYSVAR_CLOCK_PUBKEY,
   SYSVAR_RENT_PUBKEY,
+  TransactionInstruction,
 } from "@solana/web3.js";
 import {
   AccountInfo as TokenAccount,
@@ -366,14 +368,14 @@ const JungleProvider: React.FC = ({ children }) => {
         wallet.publicKey
       );
 
-      let instructions = [];
-      // Checking if the user has an associated token account
+      const instructions: TransactionInstruction[] = [];
+      
       try {
         new Token(
           provider.connection,
           animal.mint,
           TOKEN_PROGRAM_ID,
-          null as any
+          Keypair.generate()
         ).getAccountInfo(stakerAccount);
       } catch (err) {
         instructions.push(
@@ -452,9 +454,13 @@ const JungleProvider: React.FC = ({ children }) => {
     ]
   );
 
+  /**
+   * Unstakes an animal.
+   * It also creates all used account if they do not exist and claims rewards
+   */
   const unstakeAnimal = useCallback(
     async (animal: Animal) => {
-      if (!wallet || !wallet.publicKey || !jungle) return;
+      if (!wallet || !jungle || !provider) return;
 
       onOpen();
 
@@ -497,40 +503,59 @@ const JungleProvider: React.FC = ({ children }) => {
         wallet.publicKey
       );
 
-      try {
-        // Create a reward account if the user does not have one
-        const instructions = userAccount
-          ? []
-          : [
-              Token.createAssociatedTokenAccountInstruction(
-                ASSOCIATED_TOKEN_PROGRAM_ID,
-                TOKEN_PROGRAM_ID,
-                jungle.mint,
-                rewardsStakerAccount,
-                wallet.publicKey,
-                wallet.publicKey
-              ),
-            ];
+      const instructions: TransactionInstruction[] = [];
 
-        // Claim rewards as well
+      if (!userAccount)
         instructions.push(
-          program.instruction.claimStaking({
-            accounts: {
-              jungle: jungleAddress,
-              escrow: jungle.escrow,
-              animal: animalAddress,
-              staker: wallet.publicKey,
-              mint: jungle.mint,
-              stakerAccount: rewardsStakerAccount,
-              rewardsAccount: rewardsAccount,
-              tokenProgram: TOKEN_PROGRAM_ID,
-              clock: SYSVAR_CLOCK_PUBKEY,
-              rent: SYSVAR_RENT_PUBKEY,
-              systemProgram: SystemProgram.programId,
-            },
-          })
+          Token.createAssociatedTokenAccountInstruction(
+            ASSOCIATED_TOKEN_PROGRAM_ID,
+            TOKEN_PROGRAM_ID,
+            jungle.mint,
+            rewardsStakerAccount,
+            wallet.publicKey,
+            wallet.publicKey
+          )
         );
 
+      try {
+        new Token(
+          provider.connection,
+          animal.mint,
+          TOKEN_PROGRAM_ID,
+          Keypair.generate()
+        ).getAccountInfo(animalStakerAccount);
+      } catch (err) {
+        instructions.push(
+          Token.createAssociatedTokenAccountInstruction(
+            ASSOCIATED_TOKEN_PROGRAM_ID,
+            TOKEN_PROGRAM_ID,
+            animal.mint,
+            animalStakerAccount,
+            wallet.publicKey,
+            wallet.publicKey
+          )
+        );
+      }
+
+      instructions.push(
+        program.instruction.claimStaking({
+          accounts: {
+            jungle: jungleAddress,
+            escrow: jungle.escrow,
+            animal: animalAddress,
+            staker: wallet.publicKey,
+            mint: jungle.mint,
+            stakerAccount: rewardsStakerAccount,
+            rewardsAccount: rewardsAccount,
+            tokenProgram: TOKEN_PROGRAM_ID,
+            clock: SYSVAR_CLOCK_PUBKEY,
+            rent: SYSVAR_RENT_PUBKEY,
+            systemProgram: SystemProgram.programId,
+          },
+        })
+      );
+
+      try {
         await program.rpc.unstakeAnimal({
           accounts: {
             jungle: jungleAddress,
