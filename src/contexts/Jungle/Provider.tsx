@@ -369,14 +369,14 @@ const JungleProvider: React.FC = ({ children }) => {
       );
 
       const instructions: TransactionInstruction[] = [];
-      
+
       try {
-        new Token(
+        console.log(await new Token(
           provider.connection,
           animal.mint,
           TOKEN_PROGRAM_ID,
           Keypair.generate()
-        ).getAccountInfo(stakerAccount);
+        ).getAccountInfo(stakerAccount));
       } catch (err) {
         instructions.push(
           Token.createAssociatedTokenAccountInstruction(
@@ -518,12 +518,12 @@ const JungleProvider: React.FC = ({ children }) => {
         );
 
       try {
-        new Token(
+        console.log(await new Token(
           provider.connection,
           animal.mint,
           TOKEN_PROGRAM_ID,
           Keypair.generate()
-        ).getAccountInfo(animalStakerAccount);
+        ).getAccountInfo(animalStakerAccount));
       } catch (err) {
         instructions.push(
           Token.createAssociatedTokenAccountInstruction(
@@ -648,15 +648,15 @@ const JungleProvider: React.FC = ({ children }) => {
         const instructions = userAccount
           ? []
           : [
-              Token.createAssociatedTokenAccountInstruction(
-                ASSOCIATED_TOKEN_PROGRAM_ID,
-                TOKEN_PROGRAM_ID,
-                jungle.mint,
-                stakerAccount,
-                wallet.publicKey,
-                wallet.publicKey
-              ),
-            ];
+            Token.createAssociatedTokenAccountInstruction(
+              ASSOCIATED_TOKEN_PROGRAM_ID,
+              TOKEN_PROGRAM_ID,
+              jungle.mint,
+              stakerAccount,
+              wallet.publicKey,
+              wallet.publicKey
+            ),
+          ];
 
         await program.rpc.claimStaking({
           accounts: {
